@@ -1,15 +1,19 @@
 ﻿using System.Reflection;
 using AutoMapper;
-using Contoso.University.Infra.Courses.Repositories;
+using Contoso.University.Api.AccessControl;
+using Contoso.University.Infra.Shared;
+using Contoso.University.Infra.Shared.Repositories;
 using Contoso.University.Model.AccessControl.Behaviors;
+using Contoso.University.Model.AccessControl.Services;
 using Contoso.University.Model.Courses.Commands;
-using Contoso.University.Model.Courses.Repositories;
+using Contoso.University.Model.Shared.Repositories;
 using Contoso.University.Model.Shared.Services;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NJsonSchema;
@@ -72,18 +76,26 @@ namespace Contoso.University.Api
             Mapper.AssertConfigurationIsValid();
 
             RegisterCourses(services);
+            RegisterAccessControl(services);
             RegisterShared(services);
+        }
+
+        private void RegisterAccessControl(IServiceCollection services)
+        {
+            services.AddSingleton<ICurrentUserService, CurrentUserService>();
         }
 
         private void RegisterShared(IServiceCollection services)
         {
-            services.AddSingleton(typeof(IPipelineBehavior<,>), typeof(UserOperationsMediatorBehavior<,>));
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(UserOperationsMediatorBehavior<,>));
             services.AddScoped<IDomainEvents, MediatorDomainEvents>();
+
+            services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("Default")));
         }
 
         private void RegisterCourses(IServiceCollection services)
         {
-            services.AddScoped<ICourseRepository, CourseRepository>();
+            services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

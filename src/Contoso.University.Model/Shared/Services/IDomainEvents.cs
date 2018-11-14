@@ -6,6 +6,6 @@ namespace Contoso.University.Model.Shared.Services
 {
     public interface IDomainEvents
     {
-        Task Raise(INotification notification, CancellationToken cancellationToken = default(CancellationToken));
+        Task Raise(IDomainEvent domainEvent, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

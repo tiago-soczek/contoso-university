@@ -1,14 +1,16 @@
-﻿using MediatR;
+﻿using Contoso.University.Model.Shared;
+using MediatR;
+using Zek.Model;
 
 namespace Contoso.University.Model.Courses.Events
 {
-    public class CourseRegistered : INotification
+    public class CourseRegistered : IDomainEvent
     {
         public CourseRegistered(Course course)
         {
-            Course = course;
+            Entity = course;
         }
 
-        public Course Course { get; }        
+        public BaseEntity Entity { get; }
     }
 }
