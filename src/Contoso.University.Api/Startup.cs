@@ -3,6 +3,8 @@ using AutoMapper;
 using Contoso.University.Infra.Courses.Repositories;
 using Contoso.University.Model.Courses.Commands;
 using Contoso.University.Model.Courses.Repositories;
+using Contoso.University.Model.Shared.Behaviors;
+using Contoso.University.Model.Shared.Services;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -62,14 +64,21 @@ namespace Contoso.University.Api
             services.AddSwagger();
 
             // Mediator
-            services.AddMediatR(modelAssembly);
+            services.AddMediatR(currentAssembly, modelAssembly, zekApiAssembly);
 
             // Auto Mapper
-            services.AddAutoMapper(currentAssembly, modelAssembly, zekApiAssembly);
+            services.AddAutoMapper(currentAssembly, modelAssembly, zekApiAssembly); 
 
             Mapper.AssertConfigurationIsValid();
 
             RegisterCourses(services);
+            RegisterShared(services);
+        }
+
+        private void RegisterShared(IServiceCollection services)
+        {
+            services.AddSingleton(typeof(IPipelineBehavior<,>), typeof(AuditRequestsBehavior<,>));
+            services.AddScoped<IDomainEvents, MediatorDomainEvents>();
         }
 
         private void RegisterCourses(IServiceCollection services)

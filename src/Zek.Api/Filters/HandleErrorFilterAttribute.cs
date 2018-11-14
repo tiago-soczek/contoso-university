@@ -22,7 +22,7 @@ namespace Zek.Api.Filters
         {
             var exception = context.Exception;
 
-            logger.LogError(exception, "Unhandled Exception");
+                logger.LogError(exception, "Unhandled Exception");
 
             var stackTrace = hostingEnvironment.IsProduction() ? null : exception.ToString();
 
