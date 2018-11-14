@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using AutoMapper;
 using Contoso.University.Api.Courses.Dtos;
 using Contoso.University.Model.Courses.Commands;
@@ -18,6 +19,8 @@ namespace Contoso.University.Api.Courses
         [HttpPost]
         public async Task<ActionResult<CourseDto>> Register(RegisterCourseCommand cmd)
         {
+            var traceId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+
             var result = await Mediator.Send(cmd);
 
             return As<CourseDto>(result);

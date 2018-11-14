@@ -4,9 +4,8 @@ using Zek.Model;
 
 namespace Contoso.University.Model.Courses
 {
-    public class Course
+    public class Course : BaseEntity
     {
-        public int Id { get; private set; }
         public string Title { get; private set; }
         public string Description { get; private set; }
         public DateTimeOffset RegisteredAt { get; private set; }

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Diagnostics;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Zek.Model;

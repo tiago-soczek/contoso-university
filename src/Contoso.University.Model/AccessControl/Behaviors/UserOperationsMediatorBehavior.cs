@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using MediatR;
 
-namespace Contoso.University.Model.Shared.Behaviors
+namespace Contoso.University.Model.AccessControl.Behaviors
 {
-    public class AuditRequestsBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    public class UserOperationsMediatorBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {
         public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken,
             RequestHandlerDelegate<TResponse> next)

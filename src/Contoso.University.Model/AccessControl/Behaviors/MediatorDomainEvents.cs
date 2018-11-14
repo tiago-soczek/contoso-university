@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Contoso.University.Model.Shared.Services;
 using MediatR;
 
-namespace Contoso.University.Model.Shared.Behaviors
+namespace Contoso.University.Model.AccessControl.Behaviors
 {
     public class MediatorDomainEvents : IDomainEvents
     {

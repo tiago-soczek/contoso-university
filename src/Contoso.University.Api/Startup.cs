@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
 using AutoMapper;
 using Contoso.University.Infra.Courses.Repositories;
+using Contoso.University.Model.AccessControl.Behaviors;
 using Contoso.University.Model.Courses.Commands;
 using Contoso.University.Model.Courses.Repositories;
-using Contoso.University.Model.Shared.Behaviors;
 using Contoso.University.Model.Shared.Services;
 using FluentValidation.AspNetCore;
 using MediatR;
@@ -77,7 +77,7 @@ namespace Contoso.University.Api
 
         private void RegisterShared(IServiceCollection services)
         {
-            services.AddSingleton(typeof(IPipelineBehavior<,>), typeof(AuditRequestsBehavior<,>));
+            services.AddSingleton(typeof(IPipelineBehavior<,>), typeof(UserOperationsMediatorBehavior<,>));
             services.AddScoped<IDomainEvents, MediatorDomainEvents>();
         }
 
