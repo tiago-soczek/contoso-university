@@ -15,15 +15,17 @@ namespace Contoso.University.Model.AccessControl.Behaviors
         private readonly IMediator mediator;
         private readonly ICurrentUserService currentUserService;
         private readonly IRepository<UserEvent> userEventRepository;
+        private readonly IDiagnosticsService diagnosticsService;
 
-        public MediatorDomainEvents(IMediator mediator, ICurrentUserService currentUserService, IRepository<UserEvent> userEventRepository)
+        public MediatorDomainEvents(IMediator mediator, ICurrentUserService currentUserService, IRepository<UserEvent> userEventRepository, IDiagnosticsService diagnosticsService)
         {
             this.mediator = mediator;
             this.currentUserService = currentUserService;
             this.userEventRepository = userEventRepository;
+            this.diagnosticsService = diagnosticsService;
         }
 
-        public async Task Raise(IDomainEvent domainEvent, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task Raise(IDomainEvent domainEvent, CancellationToken cancellationToken = default)
         {
             await Save(domainEvent);
 
@@ -39,7 +41,8 @@ namespace Contoso.University.Model.AccessControl.Behaviors
                 EntityId = domainEvent.Entity.Id,
                 Details = JsonConvert.SerializeObject(domainEvent.Entity),
                 EventName = domainEvent.GetType().Name,
-                Timestamp = Current.Now
+                Timestamp = Current.Now,
+                CorrelationId = diagnosticsService.GetCorrelationId()
             };
 
             await userEventRepository.Insert(userEvent);

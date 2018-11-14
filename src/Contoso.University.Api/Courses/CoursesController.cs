@@ -19,8 +19,6 @@ namespace Contoso.University.Api.Courses
         [HttpPost]
         public async Task<ActionResult<CourseDto>> Register(RegisterCourseCommand cmd)
         {
-            var traceId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
-
             var result = await Mediator.Send(cmd);
 
             return As<CourseDto>(result);

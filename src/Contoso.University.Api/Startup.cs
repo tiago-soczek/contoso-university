@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using AutoMapper;
 using Contoso.University.Api.AccessControl;
+using Contoso.University.Api.Shared.Services;
 using Contoso.University.Infra.Shared;
 using Contoso.University.Infra.Shared.Repositories;
 using Contoso.University.Model.AccessControl.Behaviors;
@@ -89,6 +90,7 @@ namespace Contoso.University.Api
         {
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(UserOperationsMediatorBehavior<,>));
             services.AddScoped<IDomainEvents, MediatorDomainEvents>();
+            services.AddScoped<IDiagnosticsService, DiagnosticsService>();
 
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("Default")));
         }

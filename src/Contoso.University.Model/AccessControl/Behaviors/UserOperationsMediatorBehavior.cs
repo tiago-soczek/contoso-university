@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Contoso.University.Model.AccessControl.Services;
 using Contoso.University.Model.Shared.Repositories;
+using Contoso.University.Model.Shared.Services;
 using MediatR;
 using Newtonsoft.Json;
 
@@ -10,13 +11,15 @@ namespace Contoso.University.Model.AccessControl.Behaviors
     public class UserOperationsMediatorBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {
         private readonly IRepository<UserOperation> userOperationsRepository;
+        private readonly IDiagnosticsService diagnosticsService;
         private readonly ICurrentUserService currentUserService;
         private readonly string operationName;
 
-        public UserOperationsMediatorBehavior(IRepository<UserOperation> userOperationsRepository, ICurrentUserService currentUserService)
+        public UserOperationsMediatorBehavior(IRepository<UserOperation> userOperationsRepository, ICurrentUserService currentUserService, IDiagnosticsService diagnosticsService)
         {
             this.userOperationsRepository = userOperationsRepository;
             this.currentUserService = currentUserService;
+            this.diagnosticsService = diagnosticsService;
             operationName = typeof(TRequest).Name;
         }
 
@@ -51,15 +54,10 @@ namespace Contoso.University.Model.AccessControl.Behaviors
 
             operation.OperationName = operationName;
             operation.Request = JsonConvert.SerializeObject(request);
-            operation.CorrelationId = GetCorrelationId();
+            operation.CorrelationId = diagnosticsService.GetCorrelationId();
             operation.User = await currentUserService.GetCurrentUser();
 
             return operation;
-        }
-
-        private string GetCorrelationId()
-        {
-            return "-NOT-IMPLEMENTED-YET";
         }
     }
 }
