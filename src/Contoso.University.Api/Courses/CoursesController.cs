@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using Contoso.University.Api.Courses.Dtos;
 using Contoso.University.Model.Courses.Commands;

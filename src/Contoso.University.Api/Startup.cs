@@ -53,7 +53,7 @@ namespace Contoso.University.Api
                 options.Filters.Add(typeof(ValidatorActionFilter));
                 options.Filters.Add(typeof(HandleErrorFilterAttribute));
             })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
             .AddJsonOptions(x => x.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)
             .AddFluentValidation(options => options.RegisterValidatorsFromAssembly(modelAssembly));
 
@@ -65,6 +65,8 @@ namespace Contoso.University.Api
             // Security
             // TODO: Configure keys
             services.AddDataProtection();
+
+            services.AddHealthChecks();
 
             services.AddSwagger();
 
@@ -122,6 +124,8 @@ namespace Contoso.University.Api
                 settings.GeneratorSettings.DefaultPropertyNameHandling =
                     PropertyNameHandling.CamelCase;
             });
+
+            app.UseHealthChecks("/_healthz");
         }
     }
 }
