@@ -1,5 +1,4 @@
 ﻿using Contoso.University.Model.Shared;
-using MediatR;
 using Zek.Model;
 
 namespace Contoso.University.Model.Courses.Events
