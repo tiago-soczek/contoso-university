@@ -68,15 +68,13 @@ namespace Contoso.University.Api
 
             services.AddHealthChecks();
 
-            services.AddSwagger();
+            services.AddSwaggerDocument(x => x.Title = "Contoso University");
 
             // Mediator
             services.AddMediatR(currentAssembly, modelAssembly, zekApiAssembly);
 
             // Auto Mapper
             services.AddAutoMapper(currentAssembly, modelAssembly, zekApiAssembly); 
-
-            Mapper.AssertConfigurationIsValid();
 
             RegisterCourses(services);
             RegisterAccessControl(services);
@@ -119,11 +117,8 @@ namespace Contoso.University.Api
             app.UseHttpsRedirection();
             app.UseMvc();
 
-            app.UseSwaggerUi3WithApiExplorer(settings =>
-            {
-                settings.GeneratorSettings.DefaultPropertyNameHandling =
-                    PropertyNameHandling.CamelCase;
-            });
+            app.UseSwagger();
+            app.UseSwaggerUi3();
 
             app.UseHealthChecks("/_healthz");
         }
