@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using AutoMapper;
 using Contoso.University.Api.Courses.Dtos;
 using Contoso.University.Model.Courses.Commands;
@@ -16,9 +17,9 @@ namespace Contoso.University.Api.Courses
         }
 
         [HttpPost]
-        public async Task<ActionResult<CourseDto>> Register(RegisterCourseCommand cmd)
+        public async Task<ActionResult<CourseDto>> Register(RegisterCourseCommand cmd, CancellationToken cancellationToken)
         {
-            var result = await Mediator.Send(cmd);
+            var result = await Mediator.Send(cmd, cancellationToken);
 
             return As<CourseDto>(result);
         }

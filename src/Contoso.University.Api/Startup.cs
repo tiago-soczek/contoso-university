@@ -17,8 +17,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NJsonSchema;
-using NSwag.AspNetCore;
 using Serilog;
 using Zek.Api;
 using Zek.Api.Filters;
@@ -55,7 +53,11 @@ namespace Contoso.University.Api
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
             .AddJsonOptions(x => x.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)
-            .AddFluentValidation(options => options.RegisterValidatorsFromAssembly(modelAssembly));
+            .AddFluentValidation(options =>
+                {
+                    options.RegisterValidatorsFromAssembly(modelAssembly);
+                    options.ImplicitlyValidateChildProperties = true;
+                });
 
             services.Configure<ApiBehaviorOptions>(options =>
             {
@@ -107,8 +109,8 @@ namespace Contoso.University.Api
                 app.UseHsts();
             }
 
-            app.UseCors(_ => {
-                _.AllowAnyHeader()
+            app.UseCors(x => {
+                x.AllowAnyHeader()
                  .AllowAnyMethod()
                  .AllowAnyOrigin()
                  .AllowCredentials();
